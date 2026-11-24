@@ -16,8 +16,8 @@ function ScoreChart({ sessions }: { sessions: PracticeSessionResult[] }) {
   const { t } = useI18n();
   const recent = [...sessions].slice(0, 12).reverse();
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6">
-      <h3 className="flex items-center gap-2 font-serif text-lg font-bold text-brand-navy">
+    <div className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
+      <h3 className="flex flex-wrap items-center gap-2 font-serif text-lg font-bold text-brand-navy">
         <span className="text-teal-600"><ChartIcon width={18} height={18} /></span> {t('practice.scoreOverTime')}
       </h3>
       <div className="mt-6 flex h-40 items-end gap-2">
@@ -50,8 +50,8 @@ function SessionCard({
   const { t } = useI18n();
   const missed = session.items.filter((i) => !i.isCorrect);
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5">
-      <div className="flex items-start justify-between gap-4">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+      <div className="flex min-w-0 flex-wrap items-start justify-between gap-3 sm:gap-4">
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold text-brand-navy">
             {t(`practice.modes.${session.mode}`)} · {t(`practice.difficultyLabels.${session.difficulty}`)}
@@ -136,8 +136,8 @@ export function PracticeHistory({
         <ScoreChart sessions={history} />
       </div>
 
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-serif text-lg font-bold text-brand-navy">{`${t('practice.allAttempts')} (${history.length})`}</h3>
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <h3 className="min-w-0 break-words font-serif text-lg font-bold text-brand-navy">{`${t('practice.allAttempts')} (${history.length})`}</h3>
         <button
           type="button"
           onClick={() => {

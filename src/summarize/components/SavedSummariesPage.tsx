@@ -38,15 +38,15 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-700 via-blue-700 to-cyan-600 font-sans text-slate-700">
       <header className="border-b border-slate-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4 sm:px-6">
+        <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center gap-2 px-3 py-3 sm:flex-nowrap sm:gap-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={onBack}
-            className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <ArrowLeftIcon width={18} height={18} /> {t('saved.back')}
           </button>
-          <h1 className="font-serif text-lg font-bold text-slate-900">
+          <h1 className="min-w-0 flex-1 break-words font-serif text-base font-bold text-slate-900 sm:text-lg">
             {t('saved.title')}
           </h1>
           {count > 0 && (
@@ -54,7 +54,7 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
               type="button"
               onClick={() => (confirmClear ? (clear(), setConfirmClear(false)) : setConfirmClear(true))}
               onBlur={() => setConfirmClear(false)}
-              className="ml-auto rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+              className="ml-auto shrink-0 rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-blue-700 sm:text-sm"
             >
               {confirmClear ? t('saved.confirmDelete') : t('saved.deleteAll')}
             </button>
@@ -62,8 +62,8 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <div className="rounded-[2rem] border border-white/20 bg-slate-50/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
+      <main className="mx-auto w-full min-w-0 max-w-4xl px-3 py-5 sm:px-6 sm:py-8">
+        <div className="min-w-0 rounded-[2rem] border border-white/20 bg-slate-50/95 p-4 shadow-2xl backdrop-blur-sm sm:p-8">
         {storageBlocked && (
           <div className="mb-6 rounded-2xl bg-amber-50 p-4 text-sm text-amber-800 ring-1 ring-inset ring-amber-200">
             {t('saved.storageBlocked')}
@@ -89,9 +89,9 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
               return (
                 <section
                   key={s.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-5"
+                  className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5"
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex min-w-0 flex-wrap items-start gap-3">
                     <button
                       type="button"
                       onClick={() => setOpenId(open ? null : s.id)}
@@ -100,7 +100,7 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
                       <h2 className="truncate font-serif text-base font-bold text-brand-navy">
                         {s.title}
                       </h2>
-                      <p className="mt-0.5 text-xs text-slate-400">
+                      <p className="mt-0.5 break-words text-xs text-slate-400">
                         {formatDate(s.savedAt)} · {t(`summarize.lengths.${s.length}`)} ·{' '}
                         {t(`summarize.languages.${s.language}`)}
                       </p>
@@ -108,7 +108,7 @@ export function SavedSummariesPage({ onBack }: { onBack: () => void }) {
                         <p className="mt-2 text-sm text-slate-600">{preview(s)}</p>
                       )}
                     </button>
-                    <div className="flex shrink-0 items-center gap-1.5">
+                    <div className="ml-auto flex shrink-0 items-center gap-1.5">
                       <button
                         type="button"
                         onClick={() => setOpenId(open ? null : s.id)}

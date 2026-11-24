@@ -56,7 +56,7 @@ export function TourScreen({ tour }: { tour: StudyTour }) {
         role="dialog"
         aria-modal="true"
         aria-label={t('tour.eyebrow')}
-        className="mx-auto flex min-h-full max-w-xl flex-col px-5 py-6 outline-none sm:px-8 sm:py-10"
+        className="mx-auto flex min-h-full w-full max-w-xl flex-col px-4 py-5 outline-none sm:px-8 sm:py-10"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -145,7 +145,7 @@ export function TourScreen({ tour }: { tour: StudyTour }) {
           </div>
         </div>
 
-        <div className="mt-10 flex items-center justify-between gap-3">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-3">
           {isFirst ? (
             <span />
           ) : (

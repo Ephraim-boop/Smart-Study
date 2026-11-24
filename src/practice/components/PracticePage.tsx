@@ -76,21 +76,21 @@ export function PracticePage({
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-700 via-blue-700 to-cyan-600 font-sans text-slate-700">
       <header className="border-b border-slate-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-4xl items-center gap-3 px-4 py-4 sm:px-6">
+        <div className="mx-auto flex w-full max-w-4xl flex-wrap items-center gap-2 px-3 py-3 sm:flex-nowrap sm:gap-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={handleBack}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-base font-medium text-white transition hover:bg-blue-700"
+            className="flex shrink-0 items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700 sm:text-base"
           >
             <ArrowLeftIcon width={18} height={18} className="text-white" />
             <span>{t('practice.back')}</span>
           </button>
-          <h1 className="text-lg font-bold text-slate-900">{t('practice.title')}</h1>
+          <h1 className="min-w-0 flex-1 break-words text-base font-bold text-slate-900 sm:text-lg">{t('practice.title')}</h1>
         </div>
       </header>
 
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <div className="rounded-[2rem] border border-white/20 bg-slate-50/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
+      <main className="mx-auto w-full min-w-0 max-w-4xl px-3 py-5 sm:px-6 sm:py-8">
+        <div className="min-w-0 rounded-[2rem] border border-white/20 bg-slate-50/95 p-4 shadow-2xl backdrop-blur-sm sm:p-8">
         {phase === 'setup' && (
           <PracticeSetup
             onStart={startSession}

@@ -5,9 +5,9 @@ import { type Flashcard, type ReviewStatus } from '../types';
 
 function Stat({ label, value, tone }: { label: string; value: number; tone: string }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 text-center">
-      <p className={`text-3xl font-bold ${tone}`}>{value}</p>
-      <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">{label}</p>
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 text-center sm:p-5">
+      <p className={`text-2xl font-bold ${tone} sm:text-3xl`}>{value}</p>
+      <p className="mt-1 break-words text-[10px] font-semibold uppercase text-slate-500 sm:text-xs sm:tracking-wider">{label}</p>
     </div>
   );
 }
@@ -49,14 +49,14 @@ export function DeckSummary({
   const rememberedPct = reviewed ? Math.round((gotIt / reviewed) * 100) : 0;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
-      <div className="flex items-center gap-3">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 sm:p-8">
+      <div className="flex min-w-0 items-start gap-3">
         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
           <TrophyIcon width={22} height={22} />
         </span>
-        <div>
-          <h2 className="font-serif text-2xl font-bold text-brand-navy">{t('flashcards.sessionComplete')}</h2>
-          <p className="text-slate-500">{t('flashcards.sessionCompleteHint')}</p>
+        <div className="min-w-0">
+          <h2 className="break-words font-serif text-xl font-bold text-brand-navy sm:text-2xl">{t('flashcards.sessionComplete')}</h2>
+          <p className="break-words text-slate-500">{t('flashcards.sessionCompleteHint')}</p>
         </div>
       </div>
 

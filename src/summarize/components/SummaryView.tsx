@@ -10,9 +10,9 @@ import { useI18n } from '../../i18n/LanguageProvider';
 export function SummaryView({ result }: { result: SummaryResult }) {
   const { t } = useI18n();
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 break-words">
       <Block title={t('summarize.view.main')}>
-        <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">
+        <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-700">
           {result.mainSummary}
         </p>
       </Block>
@@ -53,7 +53,7 @@ export function SummaryView({ result }: { result: SummaryResult }) {
       {result.topics.length > 0 && (
         <div id="summary-topics" className="scroll-mt-20">
           <Block title={t('summarize.view.topics')}>
-            <div className="space-y-3 text-sm">
+            <div className="space-y-3 break-words text-sm">
               {result.topics.map((t, i) => (
                 <div key={i}>
                   <p className="font-semibold text-brand-navy">{t.title}</p>

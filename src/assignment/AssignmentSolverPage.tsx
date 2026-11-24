@@ -710,7 +710,7 @@ export function AssignmentSolverPage({ onBack }: { onBack: () => void }) {
                       <>
                         {message.attachments && message.attachments.length > 0 && (
                           <div className="mb-2 flex flex-wrap gap-1.5">
-                            {message.attachments.map((fileName) => <span key={fileName} className="rounded-full bg-white/15 px-2.5 py-1 text-xs">{fileName}</span>)}
+                            {message.attachments.map((fileName) => <span key={fileName} className="max-w-full break-all rounded-full bg-white/15 px-2.5 py-1 text-xs">{fileName}</span>)}
                           </div>
                         )}
                         <p className="whitespace-pre-wrap break-words text-sm leading-6">{message.content}</p>

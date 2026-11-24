@@ -110,7 +110,7 @@ export function FlashcardDeck({
             {t('flashcards.cardProgress').replace('{n}', String(index + 1)).replace('{total}', String(order.length))} · {t('flashcards.reviewedCount').replace('{n}', String(reviewedCount))}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           <button
             type="button"
             onClick={shuffle}
@@ -155,11 +155,11 @@ export function FlashcardDeck({
         >
           {/* Front */}
           <div className="absolute inset-0 flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-6 shadow-sm [backface-visibility:hidden] sm:p-8">
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-teal-600">{t('flashcards.questionLabel')}</span>
               <div className="flex items-center gap-2">
                 {current.topic && (
-                  <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                  <span className="max-w-full break-words rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
                     {current.topic}
                   </span>
                 )}
@@ -212,7 +212,7 @@ export function FlashcardDeck({
       </div>
 
       {/* Nav */}
-      <div className="mt-6 flex items-center justify-between gap-3">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
         <button
           type="button"
           onClick={goPrev}
