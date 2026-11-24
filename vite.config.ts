@@ -39,6 +39,7 @@ const aiProxy: Record<string, ProxyOptions> = {
 
 export default defineConfig({
   plugins: [react()],
+  base: process.env.GITHUB_PAGES === 'true' ? '/Smart-Study/' : '/',
   server: { proxy: aiProxy },
   preview: { proxy: aiProxy },
 });
