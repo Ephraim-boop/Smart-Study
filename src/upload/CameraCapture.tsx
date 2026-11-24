@@ -95,8 +95,8 @@ export function CameraCapture({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
-      <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-50 flex min-h-[100dvh] items-center justify-center overflow-y-auto bg-black/70 p-2 sm:p-4">
+      <div className="max-h-[calc(100dvh-1rem)] w-full min-w-0 max-w-lg overflow-y-auto rounded-2xl bg-white shadow-2xl sm:max-h-[calc(100dvh-2rem)]">
         <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
           <h3 className="flex items-center gap-2 font-semibold text-brand-navy">
             <CameraIcon width={18} height={18} className="text-blue-600" /> Take a picture
@@ -126,7 +126,7 @@ export function CameraCapture({
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 px-4 py-4">
+        <div className="flex flex-wrap items-center justify-center gap-2 px-3 py-3 sm:justify-between sm:gap-3 sm:px-4 sm:py-4">
           <button
             type="button"
             onClick={() => setFacing((f) => (f === 'environment' ? 'user' : 'environment'))}
@@ -138,7 +138,7 @@ export function CameraCapture({
             type="button"
             onClick={capture}
             disabled={!ready}
-            className="rounded-xl bg-blue-600 px-6 py-2.5 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+            className="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50 sm:px-6"
           >
             Capture
           </button>
