@@ -327,7 +327,7 @@ export function AuthPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="mt-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <form onSubmit={handleSubmit} className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         {mode === 'signup' && !isRecovery && (
           <label className="block text-sm font-medium text-brand-navy">
             {t('auth.fullName')} <span className="font-normal text-slate-400">{t('auth.optional')}</span>

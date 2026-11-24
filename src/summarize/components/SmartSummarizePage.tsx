@@ -327,9 +327,9 @@ export function SmartSummarizePage({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-700 via-blue-700 to-cyan-600 font-sans text-slate-700">
-      <main className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-        <div className="rounded-[2rem] border border-white/20 bg-slate-50/95 p-6 shadow-2xl backdrop-blur-sm sm:p-8">
-        <div className="flex items-center gap-3">
+      <main className="mx-auto w-full min-w-0 max-w-4xl px-3 py-5 sm:px-6 sm:py-8">
+        <div className="min-w-0 rounded-[2rem] border border-white/20 bg-slate-50/95 p-4 shadow-2xl backdrop-blur-sm sm:p-8">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={onBack}
@@ -337,9 +337,9 @@ export function SmartSummarizePage({
           >
             <ArrowLeftIcon width={15} height={15} /> {t('summarize.back')}
           </button>
-          <div>
-            <h1 className="font-serif text-2xl font-bold text-brand-navy">{t('summarize.title')}</h1>
-            <p className="text-sm text-slate-500">
+          <div className="min-w-0 flex-1">
+            <h1 className="break-words font-serif text-xl font-bold text-brand-navy sm:text-2xl">{t('summarize.title')}</h1>
+            <p className="break-words text-sm text-slate-500">
               {t('summarize.subtitle')}
             </p>
           </div>
@@ -382,7 +382,7 @@ export function SmartSummarizePage({
             </section>
 
             {/* Options + generate */}
-            <section className="mt-6 flex flex-wrap items-end gap-6 rounded-2xl border border-slate-200 bg-white p-5">
+            <section className="mt-6 flex flex-wrap items-end gap-4 rounded-2xl border border-slate-200 bg-white p-4 sm:gap-6 sm:p-5">
               <OptionGroup
                 label={t('summarize.length')}
                 value={length}

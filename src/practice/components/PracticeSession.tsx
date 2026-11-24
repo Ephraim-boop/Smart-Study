@@ -152,7 +152,7 @@ export function PracticeSession({
       </div>
 
       {/* Question card */}
-      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 sm:p-8">
+      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 sm:p-8">
         <span className="inline-block rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide text-slate-500">
           {typeLabel}
           {q.topic ? ` · ${q.topic}` : ''}
@@ -277,7 +277,7 @@ export function PracticeSession({
         )}
 
         {/* Actions */}
-        <div className="mt-6 flex items-center justify-between gap-3">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
           <button
             type="button"
             onClick={() => setIndex((i) => Math.max(0, i - 1))}

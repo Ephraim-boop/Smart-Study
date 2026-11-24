@@ -47,8 +47,8 @@ function DeckCard({
   const { reviewed, remembered } = progressSummary(deck);
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="flex items-start justify-between gap-3">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <div className="flex min-w-0 items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           {editing ? (
             <div className="flex items-center gap-2">
@@ -166,17 +166,17 @@ export function SavedDecks({
 
   return (
     <div>
-      <div className="flex items-center gap-3">
+      <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
         <button
           type="button"
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
         >
           <ArrowLeftIcon width={15} height={15} /> {t('common.back')}
         </button>
-        <div>
-          <h2 className="font-serif text-2xl font-bold text-brand-navy">{t('flashcards.libraryTitle')}</h2>
-          <p className="text-sm text-slate-500">{t('flashcards.librarySubtitle')}</p>
+        <div className="min-w-0 flex-1">
+          <h2 className="break-words font-serif text-xl font-bold text-brand-navy sm:text-2xl">{t('flashcards.libraryTitle')}</h2>
+          <p className="break-words text-sm text-slate-500">{t('flashcards.librarySubtitle')}</p>
         </div>
       </div>
 
