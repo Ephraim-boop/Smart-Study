@@ -50,6 +50,7 @@ const SERVER_CODES: Record<string, AiErrorCode> = {
   UNAUTHORIZED: 'unauthorized',
   AUTH_UNREACHABLE: 'auth_unreachable',
   AI_BACKEND_DOWN: 'server_unreachable',
+  NOT_FOUND: 'not_configured',
   EMPTY_TEXT: 'empty_text',
   UNSUPPORTED_FORMAT: 'unsupported_format',
   TOO_LARGE: 'too_large',
@@ -80,7 +81,7 @@ export function aiErrorMessage(code: AiErrorCode, feature: AiFeature, serverMess
     case 'ai_not_configured':
       return 'The AI service has no API key configured. Add GEMINI_API_KEY to server/.env and restart with: npm run dev';
     case 'not_configured':
-      return 'This feature is not connected to Supabase yet. Complete the setup in SETUP.md first.';
+      return 'The secure AI function is not deployed to Supabase yet. Deploy the AI functions and configure a provider key in Supabase.';
     case 'unauthorized':
       return 'Your sign-in is no longer valid. Please sign in again.';
     case 'auth_unreachable':
