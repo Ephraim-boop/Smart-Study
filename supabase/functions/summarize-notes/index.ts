@@ -66,6 +66,61 @@ function buildPrompt(text: string, length: string, language: string, sourceName?
   ].join("\n");
 }
 
+async function callGemini(
+  prompt: string,
+  key: string,
+): Promise<{ text?: string; model?: string; error?: { code: string; message: string } }> {
+  const preferred = Deno.env.get("GEMINI_MODEL")?.trim() || "gemini-3.6-flash";
+  const models = [...new Set([preferred, "gemini-3.6-flash", "gemini-3.1-flash-lite", "gemini-3.5-flash", "gemini-3.7-flash"])];
+  let lastStatus = "unknown";
+
+  for (const model of models) {
+    let response: Response;
+    try {
+      response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(key)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(25_000),
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
+          }),
+        },
+      );
+    } catch (error) {
+      lastStatus = error instanceof Error ? error.name : "network error";
+      continue;
+    }
+
+    if (response.ok) {
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.map((part: { text?: string }) => part.text ?? "").join("");
+      if (text?.trim()) return { text, model };
+      lastStatus = "empty response";
+      continue;
+    }
+
+    lastStatus = String(response.status);
+    if (response.status === 429) {
+      return { error: { code: "RATE_LIMITED", message: "The AI service is busy. Try again shortly." } };
+    }
+    if ([400, 401, 403].includes(response.status)) {
+      return { error: { code: "INVALID_KEY", message: "The AI key is not valid or authorized. Check the Supabase secret." } };
+    }
+  }
+
+  return {
+    error: {
+      code: lastStatus === "TimeoutError" ? "GENERATION_TIMEOUT" : "MODEL_UNAVAILABLE",
+      message: lastStatus === "TimeoutError"
+        ? "The AI service took too long to answer. Please try again."
+        : "The AI model is temporarily unavailable. Please try again.",
+    },
+  };
+}
+
 function parseSummary(raw: string): unknown {
   // Strip common markdown fences and grab the first {...} block defensively.
   const cleaned = raw.replace(/```(?:json)?/gi, "").trim();
@@ -96,12 +151,13 @@ serve(async (req) => {
     }
 
     // 2) Require the AI key — never fake a summary without it.
-    const apiKey = Deno.env.get("OPENAI_API_KEY");
-    if (!apiKey) {
+    const geminiKey = Deno.env.get("GEMINI_API_KEY");
+    const openaiKey = Deno.env.get("OPENAI_API_KEY");
+    if (!geminiKey && !openaiKey) {
       return json({
         ok: false,
         code: "AI_NOT_CONFIGURED",
-        message: "Smart Summarize is not connected to an AI model yet (OPENAI_API_KEY secret is missing).",
+        message: "Smart Summarize needs GEMINI_API_KEY or OPENAI_API_KEY configured as a Supabase secret.",
       }, 503);
     }
 
@@ -114,12 +170,22 @@ serve(async (req) => {
       return json({ ok: false, code: "TOO_LARGE", message: "Those notes are too large for one request." }, 413);
     }
 
-    // 4) Call OpenAI.
+    // 4) Call the configured provider without exposing its key to the browser.
+    const prompt = buildPrompt(text, String(length ?? "medium"), String(language ?? "en"), sourceName);
+    if (geminiKey) {
+      const result = await callGemini(prompt, geminiKey);
+      if (result.error) {
+        return json({ ok: false, ...result.error }, result.error.code === "RATE_LIMITED" ? 429 : 502);
+      }
+      const summary = parseSummary(result.text!);
+      return json({ ok: true, summary, model: result.model });
+    }
+
     const openaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${openaiKey}`,
       },
       body: JSON.stringify({
         model: Deno.env.get("OPENAI_MODEL") ?? "gpt-4o-mini",
@@ -127,7 +193,7 @@ serve(async (req) => {
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: "You output only valid JSON matching the requested schema." },
-          { role: "user", content: buildPrompt(text, String(length ?? "medium"), String(language ?? "en"), sourceName) },
+          { role: "user", content: prompt },
         ],
       }),
     });
