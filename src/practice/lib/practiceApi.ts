@@ -48,6 +48,36 @@ function localUrl(pathname: string): string | null {
   return aiRoute(pathname);
 }
 
+function functionHttpStatus(error: unknown): number | undefined {
+  if (!error || typeof error !== 'object' || !('context' in error)) return undefined;
+  const context = error.context;
+  if (context instanceof Response) return context.status;
+  if (context && typeof context === 'object' && 'status' in context && typeof context.status === 'number') {
+    return context.status;
+  }
+  return undefined;
+}
+
+function functionUnavailableError(error: unknown, feature: 'practice' | 'grading'): PracticeError {
+  const status = functionHttpStatus(error);
+  const message =
+    error && typeof error === 'object' && 'message' in error && typeof error.message === 'string'
+      ? error.message.toLowerCase()
+      : '';
+  if (status === 404 || message.includes('not found') || message.includes('404')) {
+    return new PracticeError(
+      feature === 'practice'
+        ? 'The practice service is not deployed yet. Deploy supabase/functions/generate-questions (see SETUP.md).'
+        : 'The grading service is not deployed yet. Deploy supabase/functions/grade-answer (see SETUP.md).',
+      'not_configured',
+    );
+  }
+  if (status === 401 || status === 403) {
+    return new PracticeError('Your sign-in is no longer valid. Please sign in again.', 'unauthorized');
+  }
+  return new PracticeError('The practice service is unavailable right now. Please try again.', 'network');
+}
+
 async function bearerToken(): Promise<string | null> {
   if (!isAuthConfigured()) return null;
   try {
@@ -124,16 +154,14 @@ export async function generateQuestions(request: GenerateRequest): Promise<Pract
   });
   if (error) {
     const msg = String((error as { message?: string }).message ?? error).toLowerCase();
+    const status = functionHttpStatus(error);
+    if (status === 404 || status === 401 || status === 403 || msg.includes('not found') || msg.includes('404')) {
+      throw functionUnavailableError(error, 'practice');
+    }
     if (msg.includes('failed to fetch') || msg.includes('network')) {
       throw new PracticeError("We couldn't reach the practice service. Check your connection.", 'network');
     }
-    if (msg.includes('not found') || msg.includes('404')) {
-      throw new PracticeError(
-        'The practice service is not deployed yet. Deploy supabase/functions/generate-questions (see SETUP.md).',
-        'not_configured',
-      );
-    }
-    throw new PracticeError('The practice service is unavailable right now. Please try again.', 'network');
+    throw functionUnavailableError(error, 'practice');
   }
   if (!data || data.ok === false) {
     const f = data as Failure | null;
@@ -182,7 +210,7 @@ export async function gradeShortAnswer(request: GradeRequest): Promise<GradeResu
   const sb = getSupabase();
   const { data, error } = await sb.functions.invoke<GradeSuccess | Failure>('grade-answer', { body: payload });
   if (error) {
-    throw new PracticeError('The grading service is unavailable right now. Please try again.', 'network');
+    throw functionUnavailableError(error, 'grading');
   }
   if (!data || data.ok === false) {
     const f = data as Failure | null;
