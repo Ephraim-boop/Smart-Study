@@ -18,6 +18,8 @@ export type Conversation = {
 
 const STORAGE_KEY = 'studysmart-assignment-chats';
 export const ASSIGNMENT_CHATS_TABLE = 'assignment_chats';
+export const ASSIGNMENT_CHAT_LOCAL_ONLY_NOTICE =
+  'Chat history is currently saved on this device only. Apply supabase/migrations/0010_assignment_chats.sql to enable private account sync.';
 
 function isChatMessage(value: unknown): value is ChatMessage {
   if (!value || typeof value !== 'object') return false;
@@ -72,7 +74,7 @@ function mapRow(row: Record<string, unknown>): Conversation | null {
 function describeStorageError(error: unknown): string {
   const message = String((error as { message?: string })?.message ?? error ?? '');
   if (/assignment_chats|relation.*does not exist|schema cache|table.*not found/i.test(message)) {
-    return 'Chat history is currently saved on this device only. Apply supabase/migrations/0010_assignment_chats.sql to enable private account sync.';
+    return ASSIGNMENT_CHAT_LOCAL_ONLY_NOTICE;
   }
   if (/row-level security|policy|permission|not authorized/i.test(message)) {
     return 'Chat history could not sync. Check the assignment_chats row-level security policies in migration 0010.';
