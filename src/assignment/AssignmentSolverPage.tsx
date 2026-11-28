@@ -29,6 +29,7 @@ import {
   type AssignmentImage,
 } from './assignmentApi';
 import {
+  ASSIGNMENT_CHAT_LOCAL_ONLY_NOTICE,
   deleteAssignmentChat,
   loadAssignmentChats,
   readLocalAssignmentChats,
@@ -254,6 +255,7 @@ export function AssignmentSolverPage({ onBack }: { onBack: () => void }) {
 
   const activeChat = chats.find((chat) => chat.id === activeChatId) ?? null;
   const messages = activeChat?.messages ?? [];
+  const visibleStorageError = storageError === ASSIGNMENT_CHAT_LOCAL_ONLY_NOTICE ? '' : storageError;
 
   useEffect(() => {
     let active = true;
@@ -751,9 +753,9 @@ export function AssignmentSolverPage({ onBack }: { onBack: () => void }) {
 
         <div className="shrink-0 border-t border-slate-200 bg-white/95 px-2 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2 backdrop-blur sm:px-8 sm:pb-5">
           <div className="mx-auto max-w-4xl">
-            {(error || storageError) && (
+            {(error || visibleStorageError) && (
               <div role="alert" className="mb-2 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                <span>{error || storageError}</span>
+                <span>{error || visibleStorageError}</span>
                 {retryRequest && <button type="button" disabled={busy} onClick={() => void retry()} className="inline-flex shrink-0 items-center gap-1.5 font-semibold underline underline-offset-2 disabled:opacity-50">{t('assignment.tryAgain')} <ArrowRightIcon width={14} height={14} /></button>}
               </div>
             )}
